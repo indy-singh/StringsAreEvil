@@ -1,4 +1,5 @@
 ﻿using System.Buffers;
+using System.Text;
 
 namespace StringsAreEvil
 {
@@ -49,6 +50,11 @@ namespace StringsAreEvil
 
         public void Dump()
         {
+        }
+
+        public void ParseLine(StringBuilder line)
+        {
+            
         }
 
         private decimal ParseSectionAsDecimal(string line, int start, int end)

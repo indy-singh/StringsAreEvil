@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace StringsAreEvil
 {
@@ -33,6 +34,11 @@ namespace StringsAreEvil
         public void Dump()
         {
             File.WriteAllLines(@"..\..\v01.txt", list.Select(x => x.ToString()));
+        }
+
+        public void ParseLine(StringBuilder line)
+        {
+            
         }
     }
 }

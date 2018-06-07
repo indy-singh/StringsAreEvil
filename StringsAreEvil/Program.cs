@@ -13,43 +13,79 @@ namespace StringsAreEvil
         {
             AppDomain.MonitoringIsEnabled = true;
 
-            var dict = new Dictionary<string, ILineParser>
+            var dict = new Dictionary<string, Action>
             {
-                ["1"] = new LineParserV01(),
-                ["2"] = new LineParserV02(),
-                ["3"] = new LineParserV03(),
-                ["4"] = new LineParserV04(),
-                ["5"] = new LineParserV05(),
-                ["6"] = new LineParserV06(),
-                ["7"] = new LineParserV07(),
-                ["8"] = new LineParserV08(),
-                ["9"] = new LineParserV09(),
-                ["10"] = new LineParserV10(),
-                ["11"] = new LineParserV11(),
+                ["1"] = () =>
+                {
+                    Console.WriteLine("#1 ViaStreamReader");
+                    ViaStreamReader(new LineParserV01());
+                },
+                ["2"] = () =>
+                {
+                    Console.WriteLine("#2 ViaStreamReader");
+                    ViaStreamReader(new LineParserV02());
+                },
+                ["3"] = () =>
+                {
+                    Console.WriteLine("#3 ViaStreamReader");
+                    ViaStreamReader(new LineParserV03());
+                },
+                ["4"] = () =>
+                {
+                    Console.WriteLine("#4 ViaStreamReader");
+                    ViaStreamReader(new LineParserV04());
+                },
+                ["5"] = () =>
+                {
+                    Console.WriteLine("#5 ViaStreamReader");
+                    ViaStreamReader(new LineParserV05());
+                },
+                ["6"] = () =>
+                {
+                    Console.WriteLine("#6 ViaStreamReader");
+                    ViaStreamReader(new LineParserV06());
+                },
+                ["7"] = () =>
+                {
+                    Console.WriteLine("#7 ViaStreamReader");
+                    ViaStreamReader(new LineParserV07());
+                },
+                ["8"] = () =>
+                {
+                    Console.WriteLine("#8 ViaStreamReader");
+                    ViaStreamReader(new LineParserV08());
+                },
+                ["9"] = () =>
+                {
+                    Console.WriteLine("#9 ViaStreamReader");
+                    ViaStreamReader(new LineParserV09());
+                },
+                ["10"] = () =>
+                {
+                    Console.WriteLine("#10 ViaStreamReader");
+                    ViaStreamReader(new LineParserV10());
+                },
+                ["11"] = () =>
+                {
+                    Console.WriteLine("#11 ViaRawStream");
+                    ViaRawStream(new LineParserV11());
+                },
+                ["12"] = () =>
+                {
+                    Console.WriteLine("#12 ViaRawStream2");
+                    ViaRawStream2(new LineParserV12());
+                },
             };
 
+
 #if DEBUG
-            ViaRawStream(new LineParserV11());
+            dict["12"]();
             Environment.Exit(0);
 #endif
 
             if (args.Length == 1 && dict.ContainsKey(args[0]))
             {
-                var parameter = args[0];
-                var lineParser = dict[parameter];
-
-                if (parameter.Equals("11"))
-                {
-                    Console.WriteLine("Using " + lineParser.GetType().Name + " with a Raw Stream");
-                    ViaRawStream(lineParser);
-                }
-                else
-                {
-                    Console.WriteLine("Using " + lineParser.GetType().Name + " with a StreamReader");
-                    ViaStreamReader(lineParser);
-                }
-
-                //lineParser.Dump();
+                dict[args[0]]();
             }
             else
             {
@@ -147,6 +183,59 @@ namespace StringsAreEvil
                         {
                             charPool.Return(rentedCharBuffer, true);
                         }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    throw new Exception("File could not be parsed", exception);
+                }
+            }
+        }
+
+        private static void ViaRawStream2(ILineParser lineParser)
+        {
+            var sb = new StringBuilder();
+
+            using (var reader = File.OpenRead(@"..\..\example-input.csv"))
+            {
+                try
+                {
+                    bool endOfFile = false;
+                    while (reader.CanRead)
+                    {
+                        sb.Clear();
+
+                        while (endOfFile == false)
+                        {
+                            var readByte = reader.ReadByte();
+
+                            if (readByte == -1)
+                            {
+                                endOfFile = true;
+                                break;
+                            }
+
+                            var character = (char)readByte;
+
+                            if (character == '\r')
+                            {
+                                continue;
+                            }
+
+                            if (character == '\n')
+                            {
+                                break;
+                            }
+
+                            sb.Append(character);
+                        }
+
+                        if (endOfFile)
+                        {
+                            break;
+                        }
+
+                        lineParser.ParseLine(sb);
                     }
                 }
                 catch (Exception exception)

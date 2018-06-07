@@ -43,6 +43,11 @@ namespace StringsAreEvil
         {
         }
 
+        public void ParseLine(StringBuilder line)
+        {
+            
+        }
+
         private decimal ParseSectionAsDecimal(int start, int end, string line)
         {
             _stringBuilder.Clear();

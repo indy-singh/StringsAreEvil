@@ -1,21 +1,40 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
 
 namespace StringsAreEvil
 {
     /// <summary>
     /// Stats:-
-    ///     Took: 5,609 ms
-    ///     Allocated: 768,739 kb
-    ///     Peak Working Set: 16,344 kb
+    ///     Took: 6,328 ms
+    ///     Allocated: 16 kb
+    ///     Peak Working Set: 10,780 kb
     ///
     /// Change:-
-    ///     Flipping the value holder to a struct instead of a class
+    ///     Passed into the stringbuilder
     /// </summary>
-    public sealed class LineParserV10 : ILineParser
+    public sealed class LineParserV12 : ILineParser
     {
+        private List<ValueHolderAsStruct> list = new List<ValueHolderAsStruct>();
+
         public void ParseLine(string line)
         {
-            if (line.StartsWith("MNO"))
+        }
+
+        public void ParseLine(char[] line)
+        {
+            
+        }
+
+        public void Dump()
+        {
+            File.WriteAllLines(@"..\..\v11.txt", list.Select(x => x.ToString()));
+        }
+
+        public void ParseLine(StringBuilder line)
+        {
+            if (line[0] == 'M' && line[1] == 'N' && line[2] == 'O')
             {
                 int elementId = ParseSectionAsInt(line, 1); // equal to parts[1] - element id
                 int vehicleId = ParseSectionAsInt(line, 2); // equal to parts[2] - vehicle id
@@ -23,23 +42,12 @@ namespace StringsAreEvil
                 int mileage = ParseSectionAsInt(line, 4); // equal to parts[4] - mileage
                 decimal value = ParseSectionAsDecimal(line, 5); // equal to parts[5] - value
                 var valueHolder = new ValueHolderAsStruct(elementId, vehicleId, term, mileage, value);
+                //list.Add(valueHolder);
+
             }
         }
 
-        public void ParseLine(char[] line)
-        {
-        }
-
-        public void Dump()
-        {
-        }
-
-        public void ParseLine(StringBuilder line)
-        {
-            
-        }
-
-        private static decimal ParseSectionAsDecimal(string line, int numberOfCommasToSkip)
+        private static decimal ParseSectionAsDecimal(StringBuilder line, int numberOfCommasToSkip)
         {
             decimal val = 0;
             bool seenDot = false;
@@ -98,7 +106,7 @@ namespace StringsAreEvil
             return flip ? -val : val;
         }
 
-        private static int ParseSectionAsInt(string line, int numberOfCommasToSkip)
+        private static int ParseSectionAsInt(StringBuilder line, int numberOfCommasToSkip)
         {
             int val = 0;
             int counter = 0;

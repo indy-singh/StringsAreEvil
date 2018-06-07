@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace StringsAreEvil
 {
@@ -39,6 +40,11 @@ namespace StringsAreEvil
         public void Dump()
         {
             File.WriteAllLines(@"..\..\v11.txt", list.Select(x => x.ToString()));
+        }
+
+        public void ParseLine(StringBuilder line)
+        {
+            
         }
 
         private static decimal ParseSectionAsDecimal(char[] line, int numberOfCommasToSkip)

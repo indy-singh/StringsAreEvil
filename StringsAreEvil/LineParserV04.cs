@@ -37,6 +37,11 @@ namespace StringsAreEvil
         {
         }
 
+        public void ParseLine(StringBuilder line)
+        {
+            
+        }
+
         private decimal ParseSectionAsDecimal(int start, int end, string line)
         {
             var sb = new StringBuilder();

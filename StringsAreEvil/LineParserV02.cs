@@ -1,4 +1,6 @@
-﻿namespace StringsAreEvil
+﻿using System.Text;
+
+namespace StringsAreEvil
 {
     /// <summary>
     /// Stats:-
@@ -26,6 +28,11 @@
 
         public void Dump()
         {
+        }
+
+        public void ParseLine(StringBuilder line)
+        {
+            
         }
     }
 }

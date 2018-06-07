@@ -1,4 +1,6 @@
-﻿namespace StringsAreEvil
+﻿using System.Text;
+
+namespace StringsAreEvil
 {
     /// <summary>
     /// Stats:-
@@ -32,6 +34,11 @@
 
         public void Dump()
         {
+        }
+
+        public void ParseLine(StringBuilder line)
+        {
+            
         }
 
         private static decimal ParseSectionAsDecimal(string line, int numberOfCommasToSkip)
