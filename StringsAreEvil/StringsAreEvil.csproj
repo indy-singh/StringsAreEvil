@@ -47,6 +47,7 @@
     <Compile Include="LineParserV01.cs" />
     <Compile Include="LineParserV02.cs" />
     <Compile Include="LineParserV03.cs" />
+    <Compile Include="LineParserV14.cs" />
     <Compile Include="LineParserV12.cs" />
     <Compile Include="LineParserV11.cs" />
     <Compile Include="LineParserV10.cs" />

@@ -73,13 +73,18 @@ namespace StringsAreEvil
                 ["12"] = () =>
                 {
                     Console.WriteLine("#12 ViaRawStream2");
-                    ViaRawStream2(new LineParserV12());
+                    ViaRawStream(new LineParserV12());
+                },
+                ["14"] = () =>
+                {
+                    Console.WriteLine("#14 ViaRawStream2");
+                    ViaRawStreamWithSmallBuffer(new LineParserV14());
                 },
             };
 
 
 #if DEBUG
-            dict["12"]();
+            dict["14"]();
             Environment.Exit(0);
 #endif
 
@@ -192,11 +197,11 @@ namespace StringsAreEvil
             }
         }
 
-        private static void ViaRawStream2(ILineParser lineParser)
+        private static void ViaRawStreamWithSmallBuffer(ILineParser lineParser)
         {
             var sb = new StringBuilder();
 
-            using (var reader = File.OpenRead(@"..\..\example-input.csv"))
+            using (var reader = new FileStream(@"..\..\example-input.csv", FileMode.Open, FileAccess.Read, FileShare.None, 256))
             {
                 try
                 {
