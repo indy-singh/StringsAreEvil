@@ -81,6 +81,13 @@ namespace StringsAreEvil
                     Console.WriteLine("#14 ViaFileStreamWithStringBuilderWithCustomBufferSize: " + bufferSize);
                     ViaFileStreamWithStringBuilderWithCustomBufferSize(new LineParserV14(), bufferSize);
                 },
+                ["15"] = () =>
+                {
+                    // reuse the same line parser on purpose here, we are modifying the buffer size used by the file stream.
+                    const int bufferSize = 20480;
+                    Console.WriteLine("#15 ViaFileStreamWithStringBuilderWithCustomBufferSize: " + bufferSize);
+                    ViaFileStreamWithStringBuilderWithCustomBufferSize(new LineParserV14(), bufferSize);
+                },
             };
 
 
