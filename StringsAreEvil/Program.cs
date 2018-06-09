@@ -73,7 +73,7 @@ namespace StringsAreEvil
                 ["12"] = () =>
                 {
                     Console.WriteLine("#12 ViaRawStream2");
-                    ViaRawStream(new LineParserV12());
+                    ViaRawStreamWithStingBuilder(new LineParserV12());
                 },
                 ["14"] = () =>
                 {
@@ -188,6 +188,59 @@ namespace StringsAreEvil
                         {
                             charPool.Return(rentedCharBuffer, true);
                         }
+                    }
+                }
+                catch (Exception exception)
+                {
+                    throw new Exception("File could not be parsed", exception);
+                }
+            }
+        }
+
+        private static void ViaRawStreamWithStingBuilder(ILineParser lineParser)
+        {
+            var sb = new StringBuilder();
+
+            using (var reader = File.OpenRead(@"..\..\example-input.csv"))
+            {
+                try
+                {
+                    bool endOfFile = false;
+                    while (reader.CanRead)
+                    {
+                        sb.Clear();
+
+                        while (endOfFile == false)
+                        {
+                            var readByte = reader.ReadByte();
+
+                            if (readByte == -1)
+                            {
+                                endOfFile = true;
+                                break;
+                            }
+
+                            var character = (char)readByte;
+
+                            if (character == '\r')
+                            {
+                                continue;
+                            }
+
+                            if (character == '\n')
+                            {
+                                break;
+                            }
+
+                            sb.Append(character);
+                        }
+
+                        if (endOfFile)
+                        {
+                            break;
+                        }
+
+                        lineParser.ParseLine(sb);
                     }
                 }
                 catch (Exception exception)
