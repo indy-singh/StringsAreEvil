@@ -67,18 +67,19 @@ namespace StringsAreEvil
                 },
                 ["11"] = () =>
                 {
-                    Console.WriteLine("#11 ViaRawStream");
-                    ViaRawStream(new LineParserV11());
+                    Console.WriteLine("#11 ViaFileStreamWithArrayPoolAndStringBuilder");
+                    ViaFileStreamWithArrayPoolAndStringBuilder(new LineParserV11());
                 },
                 ["12"] = () =>
                 {
-                    Console.WriteLine("#12 ViaRawStream2");
-                    ViaRawStreamWithStingBuilder(new LineParserV12());
+                    Console.WriteLine("#12 ViaFileStreamWithStringBuilder");
+                    ViaFileStreamWithStringBuilder(new LineParserV12());
                 },
                 ["14"] = () =>
                 {
-                    Console.WriteLine("#14 ViaRawStream2");
-                    ViaRawStreamWithSmallBuffer(new LineParserV14());
+                    const int bufferSize = 256;
+                    Console.WriteLine("#14 ViaFileStreamWithStringBuilderWithCustomBufferSize: " + bufferSize);
+                    ViaFileStreamWithStringBuilderWithCustomBufferSize(new LineParserV14(), bufferSize);
                 },
             };
 
@@ -128,7 +129,7 @@ namespace StringsAreEvil
             }
         }
 
-        private static void ViaRawStream(ILineParser lineParser)
+        private static void ViaFileStreamWithArrayPoolAndStringBuilder(ILineParser lineParser)
         {
             var sb = new StringBuilder();
 
@@ -197,7 +198,7 @@ namespace StringsAreEvil
             }
         }
 
-        private static void ViaRawStreamWithStingBuilder(ILineParser lineParser)
+        private static void ViaFileStreamWithStringBuilder(ILineParser lineParser)
         {
             var sb = new StringBuilder();
 
@@ -250,11 +251,11 @@ namespace StringsAreEvil
             }
         }
 
-        private static void ViaRawStreamWithSmallBuffer(ILineParser lineParser)
+        private static void ViaFileStreamWithStringBuilderWithCustomBufferSize(ILineParser lineParser, int bufferSize)
         {
             var sb = new StringBuilder();
 
-            using (var reader = new FileStream(@"..\..\example-input.csv", FileMode.Open, FileAccess.Read, FileShare.None, 256))
+            using (var reader = new FileStream(@"..\..\example-input.csv", FileMode.Open, FileAccess.Read, FileShare.None, bufferSize))
             {
                 try
                 {
